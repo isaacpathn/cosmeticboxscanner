@@ -1,6 +1,5 @@
 # v.1.0.4
-- Updated item icons
-- Restructured source code
+- Removed unecessary `.dll` files
 
 # v.1.0.3
 - Updated README.md
