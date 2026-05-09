@@ -11,8 +11,8 @@ Displays overlay with info of how many cosmetic chests there are on the level an
 - Toggle with F6
 
 ## Preview 
-![Preview 1](https://i.imgur.com/A4fcWEE.png)
-![Preview 2](https://i.imgur.com/3jE92DJ.png)
+![Preview 1](https://i.imgur.com/Y77mwxx.png)
+![Preview 2](https://i.imgur.com/CMKo0Wi.png)
 
 ## Installation
 Install with r2modman or Thunderstore.
