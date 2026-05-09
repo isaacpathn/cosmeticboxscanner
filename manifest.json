@@ -1,0 +1,9 @@
+{
+  "name": "CosmeticBoxScanner_Fixed",
+  "version_number": "1.0.4",
+  "website_url": "https://github.com/mjaskot/cosmeticboxscanner",
+  "description": "Overlay displaying counts of cosmetic boxes for current ingame level.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100"
+  ]
+}
