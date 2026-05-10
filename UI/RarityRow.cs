@@ -9,79 +9,177 @@ namespace Cosmetics_Box_Scanner.UI
     {
         public static GameObject CreateRarityRow(
             Transform parent,
-            string spriteName,
+            SemiFunc.Rarity rarity,
             out TextMeshProUGUI textComponent,
-            int index,
-            int rowSpacing = 65
+            int index
         )
         {
-            GameObject row = new GameObject(spriteName);
+            //
+            // ROW ROOT
+            //
 
-            row.transform.SetParent(parent, false);
+            GameObject row =
+                new GameObject(
+                    rarity.ToString() + "Row"
+                );
+
+            row.transform.SetParent(
+                parent,
+                false
+            );
 
             RectTransform rowRect =
                 row.AddComponent<RectTransform>();
 
-            rowRect.anchorMin = new Vector2(0, 1);
-            rowRect.anchorMax = new Vector2(1, 1);
+            rowRect.anchorMin =
+                new Vector2(0f, 1f);
 
-            rowRect.pivot = new Vector2(0.5f, 1);
+            rowRect.anchorMax =
+                new Vector2(1f, 1f);
 
-            rowRect.anchoredPosition =
-                new Vector2(0, -15 - (index * rowSpacing));
+            rowRect.pivot =
+                new Vector2(0.5f, 1f);
 
-            rowRect.sizeDelta = new Vector2(0, 36);
+            rowRect.sizeDelta =
+                new Vector2(0f, 40f);
 
             //
             // ICON
             //
 
-            GameObject iconObj = new GameObject("Icon");
+            CosmeticTokenUIElement prefab =
+                GameAssets.GetTokenPrefab();
 
-            iconObj.transform.SetParent(row.transform, false);
+            if (prefab != null)
+            {
+                GameObject iconObj =
+                    Object.Instantiate(
+                        prefab.gameObject,
+                        row.transform
+                    );
 
-            Image icon = iconObj.AddComponent<Image>();
+                iconObj.name = "Icon";
 
-            icon.sprite = AssetLoader.Load(spriteName);
+                //
+                // Disable ALL behaviours
+                //
 
-            RectTransform iconRect =
-                icon.GetComponent<RectTransform>();
+                CosmeticTokenUIElement element = iconObj.GetComponent<CosmeticTokenUIElement>();
 
-            iconRect.anchorMin = new Vector2(0, 0.5f);
-            iconRect.anchorMax = new Vector2(0, 0.5f);
+                if (element != null)
+                {
+                    element.enabled = false;
+                }
 
-            iconRect.pivot = new Vector2(0, 0.5f);
+                //
+                // Position
+                //
 
-            iconRect.anchoredPosition = new Vector2(15, 0);
+                RectTransform iconRect =
+                    iconObj.GetComponent<
+                        RectTransform>();
 
-            iconRect.sizeDelta = new Vector2(55, 55);
+                iconRect.anchorMin =
+                    new Vector2(0f, 0.5f);
+
+                iconRect.anchorMax =
+                    new Vector2(0f, 0.5f);
+
+                iconRect.pivot =
+                    new Vector2(0f, 0.5f);
+
+                iconRect.anchoredPosition =
+                    new Vector2(18f, 0f);
+
+                //
+                // Scale down
+                //
+
+                iconRect.localScale =
+                    Vector3.one * 0.75f;
+
+                //
+                // Colorize
+                //
+
+                RawImage rawImage =
+                    iconObj.GetComponentInChildren<
+                        RawImage>(true);
+
+                if (rawImage != null)
+                {
+                    rawImage.color =
+                        GameAssets.GetRarityColor(
+                            rarity
+                        );
+                }
+
+                //
+                // Hide unnecessary visuals
+                //
+
+                Graphic[] graphics =
+                    iconObj.GetComponentsInChildren<
+                        Graphic>(true);
+
+                foreach (Graphic graphic in graphics)
+                {
+                    if (
+                        graphic.name.Contains("Blink") ||
+                        graphic.name.Contains("Sheen")
+                    )
+                    {
+                        graphic.gameObject.SetActive(
+                            false
+                        );
+                    }
+                }
+            }
 
             //
             // TEXT
             //
 
-            GameObject textObj = new GameObject("Count");
+            GameObject textObj =
+                new GameObject("Count");
 
-            textObj.transform.SetParent(row.transform, false);
+            textObj.transform.SetParent(
+                row.transform,
+                false
+            );
 
             textComponent =
-                textObj.AddComponent<TextMeshProUGUI>();
+                textObj.AddComponent<
+                    TextMeshProUGUI>();
 
-            textComponent.fontSize = 24;
+            textComponent.fontSize = 18;
 
-            textComponent.color = Color.white;
+            textComponent.color =
+                Color.white;
 
-            textComponent.enableWordWrapping = false;
+            textComponent.alignment =
+                TextAlignmentOptions.Left;
+
+            textComponent.enableWordWrapping =
+                false;
+
+            textComponent.text = "0";
 
             RectTransform textRect =
-                textComponent.GetComponent<RectTransform>();
+                textComponent.GetComponent<
+                    RectTransform>();
 
-            textRect.anchorMin = new Vector2(0, 0);
-            textRect.anchorMax = new Vector2(1, 1);
+            textRect.anchorMin =
+                new Vector2(0f, 0f);
 
-            textRect.offsetMin = new Vector2(85, 0);
+            textRect.anchorMax =
+                new Vector2(1f, 1f);
 
-            textRect.offsetMax = Vector2.zero;
+            textRect.offsetMin =
+                new Vector2(68f, 0f);
+
+            textRect.offsetMax =
+                Vector2.zero;
 
             return row;
         }

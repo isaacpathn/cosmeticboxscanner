@@ -9,151 +9,198 @@ namespace Cosmetics_Box_Scanner.UI
     {
         private GameObject canvasObject;
         private GameObject panelObject;
+
         private GameObject commonRow;
         private GameObject uncommonRow;
         private GameObject rareRow;
         private GameObject ultraRow;
+
         private TextMeshProUGUI commonText;
         private TextMeshProUGUI uncommonText;
         private TextMeshProUGUI rareText;
         private TextMeshProUGUI ultraText;
-        private TextMeshProUGUI statusText;
-        private float statusTimer;
 
+        private TextMeshProUGUI statusText;
+
+        private float statusTimer;
 
         public void Create()
         {
             if (canvasObject != null)
                 return;
 
-            canvasObject = new GameObject("CosmeticScannerCanvas");
+            //
+            // CANVAS
+            //
 
-            Object.DontDestroyOnLoad(canvasObject);
+            canvasObject =
+                new GameObject(
+                    "CosmeticScannerCanvas"
+                );
 
-            Canvas canvas = canvasObject.AddComponent<Canvas>();
+            Object.DontDestroyOnLoad(
+                canvasObject
+            );
 
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            Canvas canvas =
+                canvasObject.AddComponent<
+                    Canvas>();
+
+            canvas.renderMode =
+                RenderMode.ScreenSpaceOverlay;
+
             canvas.sortingOrder = 9999;
 
-            canvasObject.AddComponent<CanvasScaler>();
-            canvasObject.AddComponent<GraphicRaycaster>();
+            CanvasScaler scaler =
+                canvasObject.AddComponent<
+                    CanvasScaler>();
+
+            scaler.uiScaleMode =
+                CanvasScaler.ScaleMode
+                    .ScaleWithScreenSize;
+
+            scaler.referenceResolution =
+                new Vector2(1920, 1080);
+
+            canvasObject.AddComponent<
+                GraphicRaycaster>();
 
             //
-            // PANEL
+            // PANEL CONTAINER
             //
 
-            panelObject = new GameObject("Panel");
+            panelObject =
+                new GameObject("Panel");
 
-            panelObject.transform.SetParent(canvasObject.transform, false);
-
-            Image panelImage = panelObject.AddComponent<Image>();
-
-            panelImage.color = new Color(0f, 0f, 0f, 0.45f);
+            panelObject.transform.SetParent(
+                canvasObject.transform,
+                false
+            );
 
             RectTransform panelRect =
-                panelObject.GetComponent<RectTransform>();
+                panelObject.AddComponent<
+                    RectTransform>();
 
-            panelRect.anchorMin = new Vector2(1, 0);
-            panelRect.anchorMax = new Vector2(1, 0);
+            panelRect.anchorMin =
+                new Vector2(1f, 0f);
 
-            panelRect.pivot = new Vector2(1, 0);
+            panelRect.anchorMax =
+                new Vector2(1f, 0f);
 
-            panelRect.anchoredPosition = new Vector2(-20, 20);
+            panelRect.pivot =
+                new Vector2(1f, 0f);
 
-            panelRect.sizeDelta = new Vector2(240, 320);
+            panelRect.anchoredPosition =
+                new Vector2(-35f, 35f);
 
             //
-            // RARITY ROWS
+            // ROWS
             //
 
-            commonRow = RarityRowFactory.CreateRarityRow(
-                panelObject.transform,
-                "transparent_bg_common.png",
-                out commonText,
-                0
-            );
+            commonRow =
+                RarityRowFactory.CreateRarityRow(
+                    panelObject.transform,
+                    SemiFunc.Rarity.Common,
+                    out commonText,
+                    0
+                );
 
-            uncommonRow = RarityRowFactory.CreateRarityRow(
-                panelObject.transform,
-                "transparent_bg_uncommon.png",
-                out uncommonText,
-                1
-            );
+            uncommonRow =
+                RarityRowFactory.CreateRarityRow(
+                    panelObject.transform,
+                    SemiFunc.Rarity.Uncommon,
+                    out uncommonText,
+                    1
+                );
 
-            rareRow = RarityRowFactory.CreateRarityRow(
-                panelObject.transform,
-                "transparent_bg_rare.png",
-                out rareText,
-                2
-            );
+            rareRow =
+                RarityRowFactory.CreateRarityRow(
+                    panelObject.transform,
+                    SemiFunc.Rarity.Rare,
+                    out rareText,
+                    2
+                );
 
-            ultraRow = RarityRowFactory.CreateRarityRow(
-                panelObject.transform,
-                "transparent_bg_ultrarare.png",
-                out ultraText,
-                3
-            );
+            ultraRow =
+                RarityRowFactory.CreateRarityRow(
+                    panelObject.transform,
+                    SemiFunc.Rarity.UltraRare,
+                    out ultraText,
+                    3
+                );
 
             //
             // STATUS TEXT
             //
 
-            GameObject statusObj = new GameObject("StatusText");
+            GameObject statusObj =
+                new GameObject("StatusText");
 
-            statusObj.transform.SetParent(canvasObject.transform, false);
+            statusObj.transform.SetParent(
+                canvasObject.transform,
+                false
+            );
 
-            statusText = statusObj.AddComponent<TextMeshProUGUI>();
+            statusText =
+                statusObj.AddComponent<
+                    TextMeshProUGUI>();
 
             statusText.fontSize = 28;
-            statusText.color = Color.white;
-            statusText.alignment = TextAlignmentOptions.Center;
+
+            statusText.color =
+                Color.white;
+
+            statusText.alignment =
+                TextAlignmentOptions.Center;
 
             RectTransform statusRect =
-                statusText.GetComponent<RectTransform>();
+                statusText.GetComponent<
+                    RectTransform>();
 
-            statusRect.anchorMin = new Vector2(0.5f, 0.1f);
-            statusRect.anchorMax = new Vector2(0.5f, 0.1f);
+            statusRect.anchorMin =
+                new Vector2(0.5f, 0.1f);
 
-            statusRect.pivot = new Vector2(0.5f, 0.5f);
+            statusRect.anchorMax =
+                new Vector2(0.5f, 0.1f);
 
-            statusRect.sizeDelta = new Vector2(600, 80);
+            statusRect.pivot =
+                new Vector2(0.5f, 0.5f);
 
-            statusText.gameObject.SetActive(false);
-            canvasObject.SetActive(true);
+            statusRect.sizeDelta =
+                new Vector2(600f, 80f);
+
+            statusText.gameObject.SetActive(
+                false
+            );
+
+            //
+            // INITIAL STATE
+            //
+
             panelObject.SetActive(false);
         }
-        public void Refresh(CosmeticStats stats, bool visible)
+
+        public void Refresh(
+            CosmeticStats stats,
+            bool visible
+        )
         {
             if (commonText == null)
                 return;
 
-            //
-            // ROW VISIBILITY
-            //
+            commonText.text =
+                stats.Common.ToString();
 
-            commonRow.SetActive(stats.Common > 0);
+            uncommonText.text =
+                stats.Uncommon.ToString();
 
-            uncommonRow.SetActive(stats.Uncommon > 0);
+            rareText.text =
+                stats.Rare.ToString();
 
-            rareRow.SetActive(stats.Rare > 0);
+            ultraText.text =
+                stats.UltraRare.ToString();
 
-            ultraRow.SetActive(stats.UltraRare > 0);
-
-            //
-            // TEXT UPDATE
-            //
-
-            commonText.text = stats.Common.ToString();
-
-            uncommonText.text = stats.Uncommon.ToString();
-
-            rareText.text = stats.Rare.ToString();
-
-            ultraText.text = stats.UltraRare.ToString();
-
-            //
-            // PANEL VISIBILITY
-            //
+            RebuildLayout(stats);
 
             bool hasAny =
                 stats.Common > 0 ||
@@ -161,11 +208,11 @@ namespace Cosmetics_Box_Scanner.UI
                 stats.Rare > 0 ||
                 stats.UltraRare > 0;
 
-            if (panelObject != null)
-            {
-                panelObject.SetActive(visible && hasAny);
-            }
+            panelObject.SetActive(
+                visible && hasAny
+            );
         }
+
         public void ShowStatus(string message)
         {
             if (statusText == null)
@@ -173,33 +220,91 @@ namespace Cosmetics_Box_Scanner.UI
 
             statusText.text = message;
 
-            statusText.gameObject.SetActive(true);
+            statusText.gameObject.SetActive(
+                true
+            );
 
             statusTimer = 2f;
         }
+
         public void Tick()
         {
-            if (statusTimer > 0f)
-            {
-                statusTimer -= Time.deltaTime;
+            if (statusTimer <= 0f)
+                return;
 
-                if (statusTimer <= 0f)
-                {
-                    statusText.gameObject.SetActive(false);
-                }
+            statusTimer -= Time.deltaTime;
+
+            if (statusTimer <= 0f)
+            {
+                statusText.gameObject.SetActive(
+                    false
+                );
             }
         }
+
         public void SetVisible(bool visible)
         {
             if (panelObject != null)
             {
-                panelObject.SetActive(visible);
+                panelObject.SetActive(
+                    visible
+                );
             }
+        }
 
-            if (!visible && statusText != null)
-            {
-                statusText.gameObject.SetActive(false);
-            }
+        private void RebuildLayout(
+            CosmeticStats stats
+        )
+        {
+            int visibleIndex = 0;
+
+            visibleIndex = PositionRow(
+                commonRow,
+                stats.Common > 0,
+                visibleIndex
+            );
+
+            visibleIndex = PositionRow(
+                uncommonRow,
+                stats.Uncommon > 0,
+                visibleIndex
+            );
+
+            visibleIndex = PositionRow(
+                rareRow,
+                stats.Rare > 0,
+                visibleIndex
+            );
+
+            visibleIndex = PositionRow(
+                ultraRow,
+                stats.UltraRare > 0,
+                visibleIndex
+            );
+        }
+
+        private int PositionRow(
+            GameObject row,
+            bool active,
+            int visibleIndex
+        )
+        {
+            row.SetActive(active);
+
+            if (!active)
+                return visibleIndex;
+
+            RectTransform rect =
+                row.GetComponent<
+                    RectTransform>();
+
+            rect.anchoredPosition =
+                new Vector2(
+                    0f,
+                    -15f - (visibleIndex * 30f)
+                );
+
+            return visibleIndex + 1;
         }
     }
 }

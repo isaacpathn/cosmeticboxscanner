@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>Cosmetics_Box_Scanner</AssemblyName>
-    <Version>1.0.5</Version>
+    <Version>1.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,10 +56,13 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\REPO\REPO_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
 
-  </ItemGroup>
+    <Reference Include="PhotonUnityNetworking">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\REPO\REPO_Data\Managed\PhotonUnityNetworking.dll</HintPath>
+    </Reference>
 
-  <ItemGroup>
-    <PackageReference Include="HarmonyX" Version="2.16.1" />
+    <Reference Include="0Harmony">
+      <HintPath>C:\Users\Marcin\AppData\Roaming\r2modmanPlus-local\REPO\profiles\Cosmetics Farm\BepInEx\core\0Harmony.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

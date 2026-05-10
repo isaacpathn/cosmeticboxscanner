@@ -38,6 +38,9 @@ namespace Cosmetics_Box_Scanner
 
         public void ToggleGUI()
         {
+            Plugin.Log.LogInfo(
+                "F6 PRESSED"
+            );
             if (scannerUI == null)
             {
                 scannerUI = new ScannerUI();

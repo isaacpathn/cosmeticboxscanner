@@ -2,6 +2,7 @@ using Cosmetics_Box_Scanner.Models;
 using Cosmetics_Box_Scanner.Systems;
 using HarmonyLib;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Cosmetics_Box_Scanner.Patches
 {
@@ -17,12 +18,27 @@ namespace Cosmetics_Box_Scanner.Patches
             scanTimer = 0f;
         }
 
-        private static void Postfix()
+        private static void Postfix(PlayerAvatar __instance)
         {
+
+            if (__instance == null)
+                return;
+
+            if (SemiFunc.IsMultiplayer())
+            {
+                if (__instance.photonView == null)
+                    return;
+
+                if (!__instance.photonView.IsMine)
+                    return;
+            }
+
             Plugin.Instance.scannerUI?.Tick();
 
             if (Input.GetKeyDown(KeyCode.F6))
             {
+                Plugin.Log.LogInfo("F6 DETECTED");
+
                 Plugin.Instance.ToggleGUI();
             }
 
